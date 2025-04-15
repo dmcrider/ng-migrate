@@ -1,8 +1,9 @@
 import { runUpdate } from '../core/update-runner.js';
 import { detectVersions } from '../core/version-detector.js';
 import { log } from '../core/logger.js';
+import { UpdateOptions } from 'src/types/options.js';
 
-export async function migrate(target: number) {
+export async function migrate(target: number, options: UpdateOptions) {
   const { angular: currentVersionRaw } = await detectVersions();
   const current = parseInt(currentVersionRaw.replace(/[^0-9]/g, ''), 10);
 
@@ -17,5 +18,5 @@ export async function migrate(target: number) {
   }
 
   const steps = Array.from({ length: target - current }, (_, i) => current + i + 1);
-  await runUpdate(steps);
+  await runUpdate(steps, options);
 }
