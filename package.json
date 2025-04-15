@@ -1,0 +1,23 @@
+{
+  "name": "ng-migrate",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "ng-migrate": "./bin/ng-migrate.ts"
+  },
+  "scripts": {
+    "start": "ts-node ./bin/ng-migrate.ts",
+    "dev": "nodemon ./bin/ng-migrate.ts"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "inquirer": "^9.2.7",
+    "semver": "^7.5.4"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.7",
+    "nodemon": "^3.0.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.3"
+  }
+}
