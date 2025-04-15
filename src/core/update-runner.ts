@@ -1,6 +1,7 @@
 import { UpdateOptions } from 'src/types/options.js';
 import { exec } from '../utils/exec.js';
 import { log } from './logger.js';
+import { runCodemods } from 'src/codemods/codemod-runner.js';
 import inquirer from 'inquirer';
 
 async function gitSnapshot(version: number){
@@ -13,11 +14,14 @@ async function gitSnapshot(version: number){
 }
 
 export async function runUpdate(versions: number[], options: UpdateOptions) {
+  let current = versions[0] - 1;
   for (const version of versions) {
     const cmd = `npx ng update @angular/core@${version} @angular/cli@${version}`;
 
     if(options.dryRun) {
       log.info(` [DRY-RUN] Would execute: ${cmd}`);
+      log.info(` [DRY-RUN] Would run codemods for Angular ${current} → ${version}`);
+      current = version;
       continue;
     }
 
@@ -52,6 +56,9 @@ export async function runUpdate(versions: number[], options: UpdateOptions) {
     try {
       await exec(cmd, options.verbose);
       log.success(`✅ Angular ${version} update complete.`);
+
+      log.info(`🔧 Running codemods for Angular ${current} → ${version}...`);
+      await runCodemods(current, version, options.dryRun);
     } catch (error) {
       log.error(`❌ Failed at Angular ${version}: ${error}`);
       break;
